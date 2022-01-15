@@ -1,0 +1,73 @@
+# These substitutions allow the end user to override certain values
+substitutions:
+  name: "pool-control"
+
+esphome:
+  name: "${name}"
+  # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: true
+
+  # This will allow for (future) project identification,
+  # configuration and updates.
+  project:
+    name: misterscience.pool-control
+    version: "1.0.0"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# To be able to get logs from the device via serial and api.
+logger:
+
+# API is a requirement of the dashboard import.
+api:
+
+# OTA is required for Over-the-Air updating
+ota:
+  password: "fa8b127a19337e411ae26e209331b903"
+
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://esphome/pool-control/pool-control.yaml@v6
+
+wifi:
+  # Set up a wifi access point
+  ap:
+    password: "pool-control"
+
+# In combination with the `ap` this allows the user
+# to provision wifi credentials to the device.
+captive_portal:
+
+# Sets up Bluetooth LE (Only on ESP32) to allow the user
+# to provision wifi credentials to the device.
+esp32_improv:
+  authorizer: none
+
+# Sets up the improv via serial client for Wi-Fi provisioning
+improv_serial:
+
+# Configuration entry for DS18B20 temperature sensors
+dallas:
+  - pin: 23
+
+# Individual DS18B20 sensors
+sensor:
+  - platform: dallas
+    # Note: It is highly recommended to change this to use the sensor address to avoid issues with detection errors causing index shifts.
+    # Please see https://esphome.io/components/sensor/dallas.html for an explanation of how to set this up.
+    # Example address setting (if this is used, index should be removed):
+    # address: 0x1c0000031edd2a28
+    index: 0
+    name: "Water Temperature"
+    
+  - platform: dallas
+    index: 1
+    name: "Controller Temperature"
+    
+  # - platform: dallas
+  #   index: 2
+  #   name: "Room Temperature"
